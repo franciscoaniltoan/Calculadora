@@ -1,18 +1,32 @@
 # Calculadora PWA de Perdas Técnicas
 
-Aplicativo HTML/CSS/JavaScript sem dependências, para simular perdas por paradas operacionais nas áreas de Esteiras, Termoplástica / Sorter Bulky, ASM | Linhas e ASM | Induções.
+Calculadora de perdas operacionais em HTML, CSS e JavaScript, sem bibliotecas externas. Publicada no GitHub Pages, instalável como PWA e disponível offline após o primeiro acesso.
 
-**Cálculo:** arredondar (meta por hora × minutos de parada × quantidade / 60). Nas Esteiras e Termoplástica a quantidade é 1.
+## Metas fixas
 
-## Recursos
-- Cálculo em tempo real e soma geral
-- Histórico salvo no próprio navegador
-- Exportação CSV e compartilhamento
-- Suporte offline via service worker
-- Manifesto PWA para instalação no navegador
+| Equipamento | Meta por hora |
+| --- | ---: |
+| Esteira 01 | 2.000 |
+| Esteira 02 | 4.620 |
+| Termoplástica | 1.664 |
+| Sorter Bulky | 5.200 |
+| ASM — Linhas | 9.625 |
+| ASM — Induções | 1.864 |
+
+Perda = arredondar(meta/hora × minutos de parada × quantidade ÷ 60). Para esteiras, termoplástica e sorter bulky, quantidade = 1. Para ASM, quantidade representa linhas ou induções afetadas.
+
+## Funcionalidades
+- Quatro setores com cabeçalhos coloridos, corpo branco e perdas em vermelho
+- Campos editáveis apenas para minutos de parada e quantidades de ASM
+- Setores minimizáveis com total visível e estado persistente
+- Nova contagem salva o registro anterior e reinicia minutos e quantidades
+- Limpar campos exige confirmação e preserva histórico
+- Relatório com cópia, compartilhamento e exportação CSV
+- Dashboard com composição das perdas por setor e evolução de até oito contagens salvas
+- Armazenamento local: sem sincronização automática entre dispositivos
+
+## Exemplo de cálculo
+Esteira 01: 700; Esteira 02: 1.001; Termoplástica: 55; Sorter Bulky: 433; ASM Linhas: 2.246; ASM Induções: 1.740. **Total: 6.175 pacotes.**
 
 ## Publicação
-Ative GitHub Pages nas configurações do repositório: **Settings → Pages → Deploy from a branch → main → /(root)**. Em seguida abra o endereço Pages gerado e instale pelo menu do navegador.
-
-## Valores de exemplo
-Esteira 01: 700; Esteira 02: 1.001; Termoplástica: 55; Sorter Bulky: 433; ASM Linhas: 2.246; ASM Induções: 1.740. **Total: 6.175 pacotes.**
+GitHub Pages: Settings → Pages → Deploy from a branch → main → /(root).
