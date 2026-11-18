@@ -189,18 +189,46 @@ footer{color:#657c92;font-size:11px;line-height:1.6}
 @media(max-width:370px){.sector-mark{width:30px;height:30px;flex-basis:30px}.sector-title strong{font-size:13px}.sector .section-head b{font-size:10px;padding:6px}.sector-chevron{font-size:20px}}
 @media(prefers-reduced-motion:reduce){.sector-chevron{transition:none}html{scroll-behavior:auto}}
 
+
+/* v8: cabeçalhos setoriais em uma linha, com nomes integrais */
+.sector .section-head,.sector .section-head:hover{display:flex;flex-wrap:nowrap;min-height:58px;padding:10px 12px;gap:7px}
+.sector-heading{display:flex;flex:1 1 auto;align-items:center;gap:8px;min-width:0;white-space:nowrap}
+.sector-title{min-width:0;display:block}
+.sector-title strong{font-size:clamp(12px,2.55vw,17px);line-height:1;white-space:nowrap;letter-spacing:-.02em}
+.sector-termo .sector-title strong{font-size:clamp(10px,2.15vw,15px)}
+.sector-mark{width:33px;height:33px;flex-basis:33px;min-width:33px;font-size:21px;border-radius:10px}
+.sector-summary{display:flex;flex:0 0 auto;gap:5px;white-space:nowrap}
+.sector .section-head b{font-size:clamp(10px,2.25vw,12px);padding:6px 8px}
+.sector-chevron{font-size:20px}
+@media(max-width:440px){.sector .section-head{padding:10px 8px}.sector-heading{gap:5px}.sector-mark{width:27px;height:27px;flex-basis:27px;min-width:27px;font-size:17px}.sector-title strong{font-size:clamp(10px,2.7vw,13px)}.sector-termo .sector-title strong{font-size:clamp(9px,2.3vw,11px)}.sector-summary{gap:3px}.sector .section-head b{font-size:10px;padding:5px 6px}.sector-chevron{font-size:18px}}
+@media(max-width:355px){.sector-mark{display:none}.sector-title strong{font-size:clamp(10px,3vw,12px)}.sector-termo .sector-title strong{font-size:10px}}
+/* Meta é protegida nos cards; edição só no diálogo dedicado */
+.configuration{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-9px 1px 17px;color:#456783;font-size:12px;font-weight:700}
+.configuration button{border:1px solid #8dc6ec;background:#e2f3ff;color:#075f9b;font-size:12px;border-radius:12px;padding:10px 13px;font-weight:850;white-space:nowrap}
+.metas-modal{width:min(530px,calc(100% - 22px))}
+.metas-modal .metas-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:17px 0}
+.meta-edit{display:block;min-width:0}
+.meta-edit span{display:block;font-size:12px;font-weight:800;margin-bottom:6px;color:#365a76}
+.meta-edit input{width:100%;height:45px;border:1px solid #a6c9e4;background:#f5fbff;color:#153a5b;border-radius:10px;padding:8px 11px;font-size:17px;font-weight:800}
+.meta-edit input:focus{outline:2px solid #1484d1}
+#metasError{color:#bd1827;font-weight:750;font-size:12px}
+#metasError[hidden]{display:none}
+@media(max-width:440px){.configuration{font-size:11px}.configuration button{font-size:11px}.metas-modal .metas-fields{gap:8px}.metas-modal .modal-actions{flex-wrap:wrap}.metas-modal .modal-actions button{flex:1}}
+
 </style></head><body><main>
 <header class="app-header"><div class="brand"><span class="brand-icon">▣</span><div><div class="kicker">PAINEL OPERACIONAL</div><h1>Calculadora de<br>Perdas Técnicas</h1></div></div><button id="install" hidden>Instalar</button></header>
 <section class="stats"><div class="stat"><span class="stat-icon">◷</span><div><small>Tempo registrado</small><strong id="minutes">111</strong><span>minutos</span></div></div><div class="stat primary"><span class="stat-icon">▣</span><div><small>Perda total</small><strong id="grand">6.175</strong><span>pacotes</span></div></div></section>
 <div class="impact">Maior impacto: <strong id="big">2.246</strong> pacotes · <span id="biglabel">ASM | Linhas</span></div>
+<div class="configuration"><span>Metas operacionais configuradas</span><button type="button" id="editMetas">⚙ Atualizar metas</button></div>
 <div id="groups"></div>
 <div class="actions"><button id="save" class="primary">Salvar contagem</button><button id="csv">Exportar CSV</button><button id="share">Compartilhar</button></div>
 <section id="dashboard" hidden class="dashboard"><div class="panel-head"><h2>Dashboard de perdas</h2><button id="closeDashboard">✕</button></div><div class="dashboard-highlights"><div><small>Perda atual</small><strong id="dbTotal">0</strong></div><div><small>Contagens salvas</small><strong id="dbCount">0</strong></div></div><h3>Distribuição por setor</h3><div id="sectorBars"></div><h3>Evolução das contagens</h3><div id="trend"></div></section>
 <section class="history"><div class="history-title"><h2>Histórico de contagens</h2><b id="count">0 registros</b></div><div id="history"></div></section>
 <footer>Metas por hora fixas conforme o relatório de referência. Cálculo: meta × minutos ÷ 60; para ASM, multiplicado pela quantidade de linhas ou induções. Perdas arredondadas individualmente. Dados salvos neste navegador, com suporte offline.</footer>
 </main>
-<nav class="bottom-nav" aria-label="Ações"><button id="newCount" type="button"><span>＋</span>Nova<br>contagem</button><button id="reset" type="button"><span>⌫</span>Limpar<br>campos</button><button id="reportBtn" type="button"><span>▤</span>Relatório</button><button id="dashboardBtn" type="button"><span>▥</span>Dashboard</button></nav>
+<nav class="bottom-nav" aria-label="Ações"><button id="newCount" type="button"><span>＋</span>Nova<br>contagem</button><button id="reset" type="button"><span>⌫</span>Limpar<br>tudo</button><button id="reportBtn" type="button"><span>▤</span>Relatório</button><button id="dashboardBtn" type="button"><span>▥</span>Dashboard</button></nav>
 <dialog id="confirmDialog" class="modal"><h2 id="confirmTitle"></h2><p id="confirmMessage"></p><div class="modal-actions"><button id="confirmCancel">Cancelar</button><button id="confirmOK" class="confirm-button">Confirmar</button></div></dialog>
+<dialog id="metasDialog" class="modal metas-modal"><h2>Atualizar metas por hora</h2><p>As metas são fixas durante a contagem. Altere os valores aqui e salve para recalcular automaticamente.</p><form id="metasForm"><div id="metasFields" class="metas-fields"></div><p id="metasError" role="alert" hidden></p><div class="modal-actions"><button id="metasRestore" type="button">Valores originais</button><button id="metasCancel" type="button">Cancelar</button><button id="metasSave" type="submit" class="confirm-button">Salvar metas</button></div></form></dialog>
 <dialog id="reportDialog" class="modal"><h2>Relatório de perdas</h2><pre id="reportText"></pre><div class="modal-actions"><button id="reportClose">Fechar</button><button id="reportCopy" class="confirm-button">Copiar</button></div></dialog>
 <div id="toast" hidden role="status"></div>
 <script>
@@ -209,8 +237,9 @@ const groups=[{id:'esteiras',name:'Esteiras',items:[['esteira1','Esteira 01',200
 const $=id=>document.getElementById(id),fmt=n=>Number(n).toLocaleString('pt-BR',{maximumFractionDigits:0}),num=v=>Math.max(0,Number(v)||0);
 const defaults=()=>Object.fromEntries(groups.flatMap(g=>g.items.map(i=>[i[0],{meta:i[2],mins:i[3],qty:i[4]}])));
 const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
-const DATA='calculadora-perdas-v1',HISTORY='calculadora-historico-v1',COLLAPSE='calculadora-setores-colapsados-v1';let data=read(DATA,defaults()),history=read(HISTORY,[]),collapsed=read(COLLAPSE,{});if(!Array.isArray(history))history=[];if(!collapsed||typeof collapsed!=='object'||Array.isArray(collapsed))collapsed={};
-const clean=d=>Object.fromEntries(groups.flatMap(g=>g.items.map(i=>[i[0],{meta:i[2],mins:num(d?.[i[0]]?.mins??i[3]),qty:num(d?.[i[0]]?.qty??i[4])}])));
+const DATA='calculadora-perdas-v1',HISTORY='calculadora-historico-v1',COLLAPSE='calculadora-setores-colapsados-v1',META_KEY='calculadora-metas-v1';let data=read(DATA,defaults()),history=read(HISTORY,[]),collapsed=read(COLLAPSE,{}),metas=read(META_KEY,{});if(!Array.isArray(history))history=[];if(!collapsed||typeof collapsed!=='object'||Array.isArray(collapsed))collapsed={};if(!metas||typeof metas!=='object'||Array.isArray(metas))metas={};
+const metaFor=i=>Number.isFinite(Number(metas[i[0]]))&&Number(metas[i[0]])>0?Number(metas[i[0]]):i[2];
+const clean=d=>Object.fromEntries(groups.flatMap(g=>g.items.map(i=>[i[0],{meta:metaFor(i),mins:num(d?.[i[0]]?.mins??i[3]),qty:num(d?.[i[0]]?.qty??i[4])}])));
 data=clean(data);const persist=()=>localStorage.setItem(DATA,JSON.stringify(data)),saveHistory=()=>localStorage.setItem(HISTORY,JSON.stringify(history));
 const loss=d=>Math.round(num(d.meta)*num(d.mins)*num(d.qty)/60),rows=()=>groups.flatMap(g=>g.items.map(i=>({area:g.name,name:i[1],id:i[0],...data[i[0]],loss:loss(data[i[0]])})));
 function layout(){
@@ -218,14 +247,14 @@ function layout(){
  $('groups').innerHTML=groups.map(g=>{
   const entries=g.items.map(i=>{
    const d=data[i[0]];
-   const field=(key,label,value)=>'<div class="input-wrap"><label for="'+i[0]+'-'+key+'">'+label+'</label><input type="number" min="0" step="'+(key==='qty'?'1':'any')+'" inputmode="decimal" id="'+i[0]+'-'+key+'" data-id="'+i[0]+'" data-key="'+key+'" value="'+value+'"></div>';
+   const field=(key,label,value)=>'<div class="input-wrap"><label for="'+i[0]+'-'+key+'">'+label+'</label><input type="number" min="0" step="'+(key==='qty'?'1':'any')+'" inputmode="decimal" id="'+i[0]+'-'+key+'" data-id="'+i[0]+'" data-key="'+key+'" value="'+(num(value)===0?'':value)+'"></div>';
    return '<article class="entry"><h3>'+i[1]+'</h3><div class="fields '+(g.unit?'has-qty':'')+'">'+
     '<div class="fixed"><label>Meta por hora · fixa</label><div class="fixed-value">'+fmt(d.meta)+'</div></div>'+
     field('mins','Minutos parados',d.mins)+(g.unit?field('qty',g.unit,d.qty):'')+
     '<div class="loss-badge"><small>PERDA</small><strong id="loss-'+i[0]+'"></strong></div></div></article>';
   }).join('');
   return '<section class="sector sector-'+g.id+'"><button type="button" class="section-head sector-toggle" data-sector-toggle="'+g.id+'" aria-expanded="'+(!collapsed[g.id])+'" aria-controls="sector-body-'+g.id+'">'+
-   '<span class="sector-heading"><span class="sector-mark" aria-hidden="true">'+icons[g.id]+'</span><span class="sector-title"><small>SETOR OPERACIONAL</small><strong>'+g.name+'</strong></span></span>'+
+   '<span class="sector-heading"><span class="sector-mark" aria-hidden="true">'+icons[g.id]+'</span><span class="sector-title"><strong>'+g.name+'</strong></span></span>'+
    '<span class="sector-summary"><b id="sum-'+g.id+'"></b><span class="sector-chevron" aria-hidden="true">⌄</span></span></button>'+
    '<div class="entries" id="sector-body-'+g.id+'" '+(collapsed[g.id]?'hidden':'')+'>'+entries+
    '<div class="sector-footer"><span>TOTAL DO SETOR</span><strong id="footer-'+g.id+'"></strong></div></div></section>';
@@ -243,9 +272,38 @@ $('csv').onclick=()=>{const table=[['Área','Equipamento','Meta/h','Minutos','Qu
 let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('install').hidden=false});$('install').onclick=async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('install').hidden=true};
 
 const ask=(title,message,fn)=>{const d=$('confirmDialog');$('confirmTitle').textContent=title;$('confirmMessage').textContent=message;$('confirmOK').onclick=()=>{d.close();fn()};$('confirmCancel').onclick=()=>d.close();d.showModal()};
-const blank=()=>Object.fromEntries(groups.flatMap(g=>g.items.map(i=>[i[0],{meta:i[2],mins:0,qty:1}])));
+const blank=()=>Object.fromEntries(groups.flatMap(g=>g.items.map(i=>[i[0],{meta:metaFor(i),mins:0,qty:0}])));
 const clearCurrent=()=>{data=blank();persist();layout();numbers();window.scrollTo({top:0,behavior:'smooth'})};
-$('reset').onclick=()=>ask('Limpar campos?','Os minutos e as quantidades serão reiniciados. O histórico salvo será preservado.',()=>{clearCurrent();toast('Campos limpos')});
+$('reset').onclick=()=>ask('Limpar toda a calculadora?','Todos os minutos e quantidades dos setores serão zerados em uma única ação. As metas configuradas e o histórico salvo serão preservados.',()=>{clearCurrent();toast('Calculadora limpa')});
+
+const allTargets=()=>groups.flatMap(g=>g.items.map(i=>({id:i[0],name:i[1],meta:metaFor(i),original:i[2],group:g.name})));
+const metasDialog=$('metasDialog');
+function showMetas(){
+ $('metasError').hidden=true;
+ $('metasFields').innerHTML=allTargets().map(m=>'<label class="meta-edit"><span>'+m.name+'</span><input type="number" min="1" step="any" inputmode="decimal" name="'+m.id+'" data-meta="'+m.id+'" value="'+m.meta+'" required></label>').join('');
+ metasDialog.showModal();
+}
+$('editMetas').onclick=showMetas;
+$('metasCancel').onclick=()=>metasDialog.close();
+$('metasRestore').onclick=()=>{for(const m of allTargets()){const el=metasDialog.querySelector('[data-meta="'+m.id+'"]');if(el)el.value=String(m.original)}$('metasError').hidden=true};
+$('metasForm').onsubmit=e=>{
+ e.preventDefault();
+ const updated={};
+ for(const m of allTargets()){
+  const input=metasDialog.querySelector('[data-meta="'+m.id+'"]'),value=Number(input.value);
+  if(!Number.isFinite(value)||value<=0){
+   $('metasError').textContent='Informe metas maiores que zero para todos os equipamentos.';
+   $('metasError').hidden=false;
+   input.focus();return;
+  }
+  updated[m.id]=value;
+ }
+ try{localStorage.setItem(META_KEY,JSON.stringify(updated))}catch{toast('Armazenamento indisponível: metas não foram salvas');return}
+ metas=updated;data=clean(data);persist();metasDialog.close();layout();numbers();
+ if(!$('dashboard').hidden)renderDashboard();
+ toast('Metas atualizadas e perdas recalculadas');
+};
+
 $('newCount').onclick=()=>ask('Iniciar nova contagem?','A contagem atual será salva automaticamente antes de iniciar uma nova. Os registros anteriores serão preservados.',()=>{
  if(rows().some(r=>r.mins>0||r.loss>0)){
   history.unshift({id:String(Date.now())+'-'+Math.random().toString(36).slice(2),date:new Date().toISOString(),total:rows().reduce((a,b)=>a+b.loss,0),data:JSON.parse(JSON.stringify(data))});
