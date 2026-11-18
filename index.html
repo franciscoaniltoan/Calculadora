@@ -50,6 +50,25 @@
 @media(max-width:390px){.sector .section-head{flex-wrap:wrap}.sector-summary{margin-left:44px}.sector .section-head h2{font-size:15px}}
 @media(prefers-reduced-motion:reduce){.sector-chevron{transition:none}}
 
+
+/* v5: todo o card do setor usa a mesma cor sólida, sem gradiente e sem corpo azul escuro */
+.sector{background:var(--sector);border-color:var(--sector);color:#081b2e;box-shadow:0 12px 30px rgba(0,0,0,.21)}
+.sector .section-head,.sector .section-head:hover{background:var(--sector);color:#081b2e;border-left-color:rgba(8,27,46,.35)}
+.sector .section-head h2,.sector .entry h3{color:#081b2e}
+.sector .sector-eyebrow{color:#18394f}
+.sector .sector-mark{background:rgba(255,255,255,.26);border-color:rgba(8,27,46,.22);color:#081b2e}
+.sector .section-head b{color:#081b2e;background:rgba(255,255,255,.32);border-color:rgba(8,27,46,.19)}
+.sector .sector-chevron{color:#081b2e}
+.sector .entries{background:var(--sector)}
+.sector .entry,.sector .entry:first-child{background:transparent;border-top-color:rgba(8,27,46,.27)}
+.sector label,.sector .fixed label{color:#17354a}
+.sector .fixed-value{background:rgba(255,255,255,.23);border-color:rgba(8,27,46,.25);color:#081b2e}
+.sector input{background:#081b2e;border:1px solid rgba(255,255,255,.44);color:#f7fbff}
+.sector input:focus{outline:2px solid #081b2e;outline-offset:2px}
+.sector .result{border-top-color:rgba(8,27,46,.27)}
+.sector .result span{color:#17354a}
+.sector .result strong{color:#071c2e;text-shadow:none}
+
 </style></head><body><main>
 <header><div><div class="kicker">PAINEL OPERACIONAL</div><h1>Perdas Técnicas</h1><p>Calcule o impacto das paradas em pacotes</p></div><button id="install" hidden>Instalar aplicativo</button></header>
 <section class="stats"><div class="stat primary"><small>Perda total estimada</small><strong id="grand">6.175</strong><span>pacotes não processados</span></div><div class="stat"><small>Tempo acumulado</small><strong id="minutes">111</strong><span>minutos registrados</span></div><div class="stat"><small>Maior impacto</small><strong id="big">2.246</strong><span id="biglabel">ASM | Linhas</span></div></section>
