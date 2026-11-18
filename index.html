@@ -117,11 +117,43 @@ function numbers(){const r=rows(),total=r.reduce((a,b)=>a+b.loss,0);groups.forEa
 let timer;function toast(msg){$('toast').textContent=msg;$('toast').hidden=false;clearTimeout(timer);timer=setTimeout(()=>$('toast').hidden=true,2400)}
 function renderHistory(){$('count').textContent=history.length+' registros';$('history').innerHTML=history.length?history.map(h=>'<div class="history-row"><div><b>'+fmt(h.total)+' pacotes</b><small>'+new Date(h.date).toLocaleString('pt-BR')+'</small></div><div><button data-open="'+h.id+'">Abrir</button> <button data-del="'+h.id+'">Excluir</button></div></div>').join(''):'<div class="empty">Nenhuma contagem salva.</div>';document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{const h=history.find(x=>x.id===b.dataset.open);if(!h)return;data=clean(h.data);persist();layout();numbers();window.scrollTo({top:0,behavior:'smooth'});toast('Contagem restaurada')});document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(!confirm('Excluir esta contagem?'))return;history=history.filter(x=>x.id!==b.dataset.del);saveHistory();renderHistory()})}
 $('save').onclick=()=>{history.unshift({id:String(Date.now())+'-'+Math.random().toString(36).slice(2),date:new Date().toISOString(),total:rows().reduce((a,b)=>a+b.loss,0),data:JSON.parse(JSON.stringify(data))});saveHistory();renderHistory();toast('Contagem salva')};
-$('reset').onclick=()=>{if(!confirm('Restaurar os valores da imagem? O histórico será mantido.'))return;data=defaults();persist();layout();numbers();toast('Exemplo restaurado')};
-const report=()=>['PERDAS TÉCNICAS',new Date().toLocaleString('pt-BR'),...rows().map(r=>r.area+' / '+r.name+': '+fmt(r.loss)+' pacotes'),'TOTAL: '+$('grand').textContent+' pacotes'].join('\n');
+const report=()=>['RELATÓRIO DE PERDAS TÉCNICAS',new Date().toLocaleString('pt-BR'),'',...rows().map(r=>r.area+' / '+r.name+' | Meta fixa: '+fmt(r.meta)+'/h | '+r.mins+' minutos | Qtd: '+r.qty+' | Perda: '+fmt(r.loss)+' pacotes'),'','TOTAL: '+$('grand').textContent+' pacotes'].join('\n');
 $('share').onclick=async()=>{try{if(navigator.share)await navigator.share({title:'Perdas Técnicas',text:report()});else{await navigator.clipboard.writeText(report());toast('Resumo copiado')}}catch(e){if(e.name!=='AbortError')toast('Compartilhamento indisponível')}};
 $('csv').onclick=()=>{const table=[['Área','Equipamento','Meta/h','Minutos','Quantidade','Perda'],...rows().map(r=>[r.area,r.name,r.meta,r.mins,r.qty,r.loss]),['TOTAL','','','','',rows().reduce((a,b)=>a+b.loss,0)]];const csv='\ufeff'+table.map(c=>c.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\r\n');const blob=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=blob;a.download='perdas-tecnicas-'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(blob),1000)};
 let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('install').hidden=false});$('install').onclick=async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('install').hidden=true};
+
+const ask=(title,message,fn)=>{const d=$('confirmDialog');$('confirmTitle').textContent=title;$('confirmMessage').textContent=message;$('confirmOK').onclick=()=>{d.close();fn()};$('confirmCancel').onclick=()=>d.close();d.showModal()};
+const blank=()=>Object.fromEntries(groups.flatMap(g=>g.items.map(i=>[i[0],{meta:i[2],mins:0,qty:1}])));
+const clearCurrent=()=>{data=blank();persist();layout();numbers();window.scrollTo({top:0,behavior:'smooth'})};
+$('reset').onclick=()=>ask('Limpar campos?','Os minutos e as quantidades serão reiniciados. O histórico salvo será preservado.',()=>{clearCurrent();toast('Campos limpos')});
+$('newCount').onclick=()=>ask('Iniciar nova contagem?','A contagem atual será salva automaticamente antes de iniciar uma nova. Os registros anteriores serão preservados.',()=>{
+ if(rows().some(r=>r.mins>0||r.loss>0)){
+  history.unshift({id:String(Date.now())+'-'+Math.random().toString(36).slice(2),date:new Date().toISOString(),total:rows().reduce((a,b)=>a+b.loss,0),data:JSON.parse(JSON.stringify(data))});
+  saveHistory();renderHistory();
+ }
+ clearCurrent();toast('Nova contagem iniciada; histórico preservado');
+});
+$('reportBtn').onclick=()=>{$('reportText').textContent=report();$('reportDialog').showModal()};
+$('reportClose').onclick=()=>$('reportDialog').close();
+$('reportCopy').onclick=async()=>{try{await navigator.clipboard.writeText(report());$('reportDialog').close();toast('Relatório copiado')}catch{toast('Não foi possível copiar')}};
+function renderDashboard(){
+ const r=rows(),total=r.reduce((a,b)=>a+b.loss,0);
+ $('dbTotal').textContent=fmt(total)+' pacotes';$('dbCount').textContent=String(history.length);
+ const colors={esteiras:'#0998e8',termo:'#e77f27',linhas:'#9554d0',inducoes:'#0aaa70'};
+ $('sectorBars').innerHTML=groups.map(g=>{
+  const v=g.items.reduce((sum,i)=>sum+loss(data[i[0]]),0),pct=total?Math.round(v/total*100):0;
+  return '<div class="bar-row"><div class="bar-label"><strong>'+g.name+'</strong><span>'+fmt(v)+' · '+pct+'%</span></div><div class="bar-track"><div class="bar-fill" style="background:'+colors[g.id]+';width:'+pct+'%"></div></div></div>';
+ }).join('');
+ const list=history.slice(0,8).reverse(),max=Math.max(1,...list.map(h=>num(h.total)));
+ $('trend').innerHTML=list.length?list.map(h=>{
+  const v=num(h.total),height=Math.max(3,Math.round(v/max*100)),date=new Date(h.date);
+  const label=Number.isFinite(date.getTime())?date.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}):'--';
+  return '<div class="trend-item"><span>'+fmt(v)+'</span><div class="trend-column" style="height:'+height+'%"></div><small>'+label+'</small></div>';
+ }).join(''):'<p class="empty">Salve contagens para acompanhar a evolução.</p>';
+}
+$('dashboardBtn').onclick=()=>{const d=$('dashboard');d.hidden=!d.hidden;if(!d.hidden){renderDashboard();d.scrollIntoView({behavior:'smooth',block:'start'})}};
+$('closeDashboard').onclick=()=>$('dashboard').hidden=true;
+
 layout();numbers();renderHistory();if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
 </script></body></html>
