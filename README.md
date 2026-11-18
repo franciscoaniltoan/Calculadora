@@ -16,11 +16,11 @@ Calculadora de perdas operacionais em HTML, CSS e JavaScript, sem bibliotecas ex
 Perda = arredondar(meta/hora × minutos de parada × quantidade ÷ 60). Para esteiras, termoplástica e sorter bulky, quantidade = 1. Para ASM, quantidade representa linhas ou induções afetadas.
 
 ## Funcionalidades
-- Quatro setores com cabeçalhos coloridos, corpo branco e perdas em vermelho
-- Campos editáveis apenas para minutos de parada e quantidades de ASM
+- Quatro setores com cabeçalhos coloridos compactos em uma linha, corpo branco e perdas em vermelho
+- Campos editáveis para minutos e quantidades de ASM; metas configuráveis em pop-up pelo botão **Atualizar metas** (persistidas no dispositivo)
 - Setores minimizáveis com total visível e estado persistente
 - Nova contagem salva o registro anterior e reinicia minutos e quantidades
-- Limpar campos exige confirmação e preserva histórico
+- Limpar tudo zera minutos e quantidades de todos os setores com um único pop-up; preserva metas e histórico
 - Relatório com cópia, compartilhamento e exportação CSV
 - Dashboard com composição das perdas por setor e evolução de até oito contagens salvas
 - Armazenamento local: sem sincronização automática entre dispositivos
