@@ -215,6 +215,29 @@ footer{color:#657c92;font-size:11px;line-height:1.6}
 #metasError[hidden]{display:none}
 @media(max-width:440px){.configuration{font-size:11px}.configuration button{font-size:11px}.metas-modal .metas-fields{gap:8px}.metas-modal .modal-actions{flex-wrap:wrap}.metas-modal .modal-actions button{flex:1}}
 
+
+/* v9: indicadores no topo na mesma linha, 50% / 50%, inclusive em telas pequenas */
+.stats{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;align-items:stretch}
+.stats>.stat,.stats>.stat.primary{grid-column:auto!important;grid-row:auto!important;min-width:0;width:100%;height:100%;display:flex;align-items:center;gap:10px;overflow:hidden}
+.stats>.stat>div{min-width:0;flex:1}
+.stats>.stat small{overflow-wrap:normal;font-size:clamp(9px,1.75vw,12px);line-height:1.2}
+.stats>.stat strong{font-size:clamp(25px,5vw,38px);white-space:nowrap;font-variant-numeric:tabular-nums}
+.stats>.stat .stat-icon{flex:0 0 auto}
+@media(max-width:700px){
+ .stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px}
+ .stats>.stat,.stats>.stat.primary{padding:10px 8px;min-height:95px;gap:7px}
+ .stats>.stat .stat-icon{width:29px;height:34px;font-size:21px}
+ .stats>.stat small{font-size:9px;letter-spacing:-.015em}
+ .stats>.stat strong{font-size:clamp(23px,6vw,30px)}
+ .stats>.stat span:not(.stat-icon){font-size:11px}
+}
+@media(max-width:355px){
+ .stats>.stat,.stats>.stat.primary{gap:5px;padding:9px 6px}
+ .stats>.stat .stat-icon{width:24px;font-size:18px}
+ .stats>.stat small{font-size:8px}
+ .stats>.stat strong{font-size:22px}
+}
+
 </style></head><body><main>
 <header class="app-header"><div class="brand"><span class="brand-icon">▣</span><div><div class="kicker">PAINEL OPERACIONAL</div><h1>Calculadora de<br>Perdas Técnicas</h1></div></div><button id="install" hidden>Instalar</button></header>
 <section class="stats"><div class="stat"><span class="stat-icon">◷</span><div><small>Tempo registrado</small><strong id="minutes">111</strong><span>minutos</span></div></div><div class="stat primary"><span class="stat-icon">▣</span><div><small>Perda total</small><strong id="grand">6.175</strong><span>pacotes</span></div></div></section>
